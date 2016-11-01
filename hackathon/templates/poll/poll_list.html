@@ -1,0 +1,12 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+
+    {% for poll in polls %}
+    <div>
+    <h2><a href="{% url 'poll:poll_detail' poll_id=poll.pk %}">{{ poll.title }}</a></h2>
+    <p>created_date: {{ poll.created_date }}</p>
+    </div>
+    {% endfor %}
+
+{% endblock %}

@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+TEMPLATES_DIR = os.path.join(BASE_DIR,'templates')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -27,6 +27,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#backends
+AUTHENTICATION_BACKENDS = [
+   'django.contrib.auth.backends.ModelBackend',
+   "member.facebook_backends.FacebookBackend",
+]
+
+#Facebook_settings
+FACEBOOK_APP_ID = '923219767822683'
+APP_SECRET_CODE = '3fb0cd355fe6dc6a04c4e878b1df56a2'
+
+#User_model
+AUTH_USER_MODEL = 'member.ServiceUser'
 
 # Application definition
 
@@ -37,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'member',
+    'poll',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +68,9 @@ ROOT_URLCONF = 'hackathon.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            TEMPLATES_DIR,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
