@@ -10,7 +10,7 @@ class ServiceUserManager(BaseUserManager):
                           last_name=user_info['last_name'],
                           first_name=user_info['first_name'],
                           facebook_id=user_info['id'])
-        if user.email=='teacher':
+        if user.email=='arcanelux@gmail.com':
             user.is_teacher=True
         user.save()
         return user

@@ -1,6 +1,7 @@
-from django.shortcuts import render,redirect,HttpResponse
-from .models import Poll,Result,Comment
-from .forms import  PollForm
+from django.shortcuts import render, redirect, HttpResponse
+from .models import Poll, Result, Comment, Like
+import json
+from .forms import PollForm
 
 
 def poll_list(request):
@@ -53,29 +54,36 @@ def poll_detail(request,poll_id):
         context['poll']=poll
         return render(request,'poll/poll_detail.html',context)
 
-def poll_result(request,poll_id):
 
+def poll_result(request, poll_id):
     poll = Poll.objects.get(pk=poll_id)
-    result1 = Result.objects.filter(poll=poll,score=1)
-    result2 = Result.objects.filter(poll=poll,score=2)
-    result3 = Result.objects.filter(poll=poll,score=3)
-    result4 = Result.objects.filter(poll=poll,score=4)
-    result5 = Result.objects.filter(poll=poll,score=5)
+
+    ret = [
+        Result.objects.filter(poll=poll,
+                              score=i).count()
+        for i in range(1, 6)
+    ]
+
+    tot = 0
+    for ind, num in enumerate(ret):
+        tot += (ind+1) * num
+
+    student = Result.objects.filter(poll_id=poll_id).count()
+    avg = tot/student
+
     comments = Comment.objects.filter(poll=poll)
-    results = Result.objects.filter(poll=poll)
-    context = {}
-    context['poll'] = poll
-    context['result1'] = result1
-    context['result2'] = result2
-    context['result3'] = result3
-    context['result4'] = result4
-    context['result5'] = result5
-    context['results'] = results
-    average = (result1.count() + result2.count()*2 + result3.count()*3 + result4.count()*4 + result5.count()*5)/results.count()
-    context['average'] = average
-    context['comments'] = comments
 
-    return render(request, 'poll/poll_result.html',context)
+    context = {'score': ret,
+               'avg': avg,
+               'comments': comments,
+               'poll': poll}
 
+    return render(request, 'poll/poll_result.html', context)
+
+
+def like(request, com_id):
+    like = Like.objects.get(comment=com_id)
+    com = Comment.objects.get(comment=com_id)
+    like.objects.add(sudent=request.user, comment=com)
 
 

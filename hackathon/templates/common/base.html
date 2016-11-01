@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/poll.js' %}"></script>
     <title>Document</title>
 </head>
 <body>
@@ -30,21 +33,24 @@
           </li>
 
           <li>
-            <a href="">Logout</a>
+            <a href="{% url 'member:logout' %}">Logout</a>
           </li>
           {% else %}
           <li>
-            <a href="">Login</a>
+            <a href="{% url 'member:login' %}">Login</a>
           </li>
           {% endif %}
         </ul>
       </div>
     </div>
   </nav>
-
-
-
+{% block login %}
+{% endblock %}
+{% if user.is_authenticated %}
 {% block content %}
 {% endblock %}
+{% else %}
+<h3>로그인 하세요</h3>
+{% endif %}
 </body>
 </html>

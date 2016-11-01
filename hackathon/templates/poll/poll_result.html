@@ -4,34 +4,51 @@
     <div>
     <h2>{{ poll.title }}</h2>
     <div>
-        <p>평균 : {{ average }}</p>
+        <p>평균 : {{ avg|floatformat:1 }}</p>
         <p></p>
-        <p>1점 하나도 이해 안가요 {{ result1.count }}명</p>
-        <p>2점 많이 모르겠어요 {{ result2.count }}명</p>
-        <p>3점 반은 알고 반은 모르겠어요 {{ result3.count }}명</p>
-        <p>4점 70퍼센트는 이해되요 {{ result4.count }}명</p>
-        <p>5점 저는 다 이해했어요 {{ result5.count }}명</p>
-
+        <p>1점 하나도 이해 안가요 {{ score.0 }}명</p>
+        <p>2점 많이 모르겠어요 {{ score.1 }}명</p>
+        <p>3점 반은 알고 반은 모르겠어요 {{ score.2 }}명</p>
+        <p>4점 70퍼센트는 이해되요 {{ score.3 }}명</p>
+        <p>5점 저는 다 이해했어요 {{ score.4 }}명</p>
     </div>
 </div>
 
-    <h4> 피드백 코멘트 </h4>
+<h4> 피드백 코멘트 </h4>
 
-    {% for comment in comments %}
+{% for comment in comments %}
 
-        {% if comment.text %}
-            <form action="" method="POST">{% csrf_token %}
-    <div class="">{{ comment.text }} <button type="submit"
-    class="btn label label-info"
-        data-toggle="tooltip"
-        data-placement="right">
-        <span class="glyphicon glyphicon-thumbs-up"></span>
-        <span> {{ comment.like }}</span>
-    </button></div>
-            </form>
+    {% if comment.text %}
 
-        {% endif %}
-    {% endfor %}
+<div class="">{{ comment.text }}
+    <button type="button" class="btn label label-info" data-toggle="tooltip"
+    data-placement="right" id={{comment.id}} onclick="btnajax({{comment.id}})">
+    <span class="glyphicon glyphicon-thumbs-up"></span>
+    <span>{{comment.like_set.all | length}}</span>
+</button>
+</div>
+
+
+{% endif %}
+{% endfor %}
+<script type="text/javascript">
+    var csrftoken = Cookies.get("scrftoken");
+
+    $.ajaxSetup({
+        headers: {"X-CSRFToken": csrftoken}
+    });
+    function btnajax(id){
+        alert($("#"+id).text())
+        var url = "/poll/like/"+id+"/"
+        $.ajax({
+            url=url,
+            type="post",
+            data="",
+            success: function(response){
+                $("#"+id).text(response.cnt)
+            }
+
+        });
+    }
+</script>
 {% endblock %}
-
-

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.conf import settings
 import requests
 from .models import ServiceUser
-from django.contrib.auth import authenticate as auth, login as auth_login
+from django.contrib.auth import authenticate as auth, login as auth_login, logout as auth_logout
 
 
 def login(request):
@@ -58,8 +58,6 @@ def fb_login(request):
         return redirect('poll:poll_list')
 
 
-
-
-
-
-
+def logout(request):
+    auth_logout(request)
+    return redirect('poll:poll_list')

@@ -19,8 +19,12 @@ class Comment(models.Model):
     student = models.ForeignKey(ServiceUser)
     poll = models.ForeignKey(Poll)
     text = models.CharField(max_length=200)
-    like = models.IntegerField(default=0)
 
+
+class Like(models.Model):
+    student = models.ForeignKey(ServiceUser)
+    comment = models.ForeignKey(Comment)
+    like_val = models.IntegerField(default=0)
 
 
 
